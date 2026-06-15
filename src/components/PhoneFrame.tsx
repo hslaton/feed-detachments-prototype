@@ -16,10 +16,10 @@ export default function PhoneFrame({
   scrollRef,
 }: PhoneFrameProps) {
   return (
-    <div className="flex min-h-full items-start justify-center bg-[#e4e6eb] p-4">
+    <div className="flex min-h-full items-start justify-center bg-[#e4e6eb] sm:p-4">
       <div
         id="phone-frame"
-        className="relative flex h-[844px] w-full max-w-[390px] flex-col overflow-hidden rounded-[2rem] border border-[#ccd0d5] bg-[#f0f2f5] shadow-2xl"
+        className="relative flex h-[100dvh] w-full flex-col overflow-hidden bg-[#f0f2f5] sm:h-[844px] sm:max-w-[390px] sm:rounded-[2rem] sm:border sm:border-[#ccd0d5] sm:shadow-2xl"
       >
         {header}
         <div
