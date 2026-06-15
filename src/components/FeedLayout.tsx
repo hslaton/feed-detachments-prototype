@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { Outlet } from 'react-router-dom'
 import BottomNav from './BottomNav'
 import PhoneFrame from './PhoneFrame'
@@ -6,6 +6,8 @@ import PhoneFrame from './PhoneFrame'
 interface FeedLayoutProps {
   children?: ReactNode
 }
+
+let savedFeedScrollTop = 0
 
 function HomeHeader() {
   return (
@@ -48,8 +50,27 @@ function HomeHeader() {
 }
 
 export default function FeedLayout({ children }: FeedLayoutProps) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+
+    el.scrollTop = savedFeedScrollTop
+
+    const handleScroll = () => {
+      savedFeedScrollTop = el.scrollTop
+    }
+    el.addEventListener('scroll', handleScroll, { passive: true })
+    return () => el.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <PhoneFrame header={<HomeHeader />} footer={<BottomNav active="Home" />}>
+    <PhoneFrame
+      header={<HomeHeader />}
+      footer={<BottomNav active="Home" />}
+      scrollRef={scrollRef}
+    >
       {children ?? <Outlet />}
     </PhoneFrame>
   )
