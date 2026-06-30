@@ -148,19 +148,21 @@ export default function MarketplaceDetailPage() {
           alt=""
           className="aspect-square w-full object-cover"
         />
-        <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
-          {listing.images.map((src, i) => (
-            <button
-              key={src}
-              type="button"
-              onClick={() => setActiveImage(i)}
-              aria-label={`Photo ${i + 1}`}
-              className={`h-1.5 rounded-full transition-all ${
-                i === activeImage ? 'w-1.5 bg-white' : 'w-1.5 bg-white/50'
-              }`}
-            />
-          ))}
-        </div>
+        {listing.images.length > 1 && (
+          <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
+            {listing.images.map((src, i) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setActiveImage(i)}
+                aria-label={`Photo ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all ${
+                  i === activeImage ? 'w-1.5 bg-white' : 'w-1.5 bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="px-4 pt-3">

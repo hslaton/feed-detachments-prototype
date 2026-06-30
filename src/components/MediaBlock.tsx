@@ -3,6 +3,7 @@ import type { PostMedia } from '../data/mockPosts'
 interface MediaBlockProps {
   media: PostMedia
   onOpenMedia: (startIndex?: number) => void
+  actionLabel?: string
 }
 
 function PlayIcon() {
@@ -22,22 +23,40 @@ function PlayIcon() {
   )
 }
 
-export default function MediaBlock({ media, onOpenMedia }: MediaBlockProps) {
+export default function MediaBlock({
+  media,
+  onOpenMedia,
+  actionLabel = 'Open media viewer',
+}: MediaBlockProps) {
   const handleClick = () => onOpenMedia(0)
 
   if (media.type === 'single') {
+    const cropStyle =
+      media.imageScale && media.objectPosition
+        ? {
+            objectPosition: media.objectPosition,
+            transform: `scale(${media.imageScale})`,
+            transformOrigin: media.objectPosition,
+          }
+        : media.objectPosition
+          ? { objectPosition: media.objectPosition }
+          : undefined
+
     return (
       <button
         type="button"
         onClick={handleClick}
         className="block w-full cursor-pointer overflow-hidden active:opacity-90"
-        aria-label="Open media viewer"
+        aria-label={actionLabel}
       >
-        <img
-          src={media.urls[0]}
-          alt=""
-          className="aspect-[4/3] w-full object-cover"
-        />
+        <div className="aspect-[4/3] overflow-hidden">
+          <img
+            src={media.urls[0]}
+            alt=""
+            className="h-full w-full object-cover"
+            style={cropStyle}
+          />
+        </div>
       </button>
     )
   }
@@ -65,7 +84,7 @@ export default function MediaBlock({ media, onOpenMedia }: MediaBlockProps) {
       type="button"
       onClick={handleClick}
       className="grid w-full cursor-pointer grid-cols-2 grid-rows-2 gap-0.5 bg-black active:opacity-90"
-      aria-label="Open media viewer"
+      aria-label={actionLabel}
     >
       {media.urls.slice(0, 4).map((url) => (
         <img

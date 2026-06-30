@@ -4,6 +4,8 @@ export interface PostMedia {
   type: MediaType
   urls: string[]
   posterUrl?: string
+  objectPosition?: string
+  imageScale?: number
 }
 
 export interface EventAttachmentData {
@@ -48,10 +50,21 @@ export interface EventReminderAttachmentData {
   sheetDateLine: string
 }
 
+export interface LinkAttachmentData {
+  type: 'link'
+  price: string
+  title: string
+  description?: string
+  location: string
+  detailPath: string
+  ctaLabel?: string
+}
+
 export type AttachmentData =
   | EventAttachmentData
   | MarketplaceAttachmentData
   | EventReminderAttachmentData
+  | LinkAttachmentData
 
 export interface Post {
   id: string
@@ -59,8 +72,12 @@ export interface Post {
   actorAvatarUrl: string
   timestamp: string
   caption: string
+  captionLink?: {
+    displayUrl: string
+    detailPath: string
+  }
   media: PostMedia
-  attachment: AttachmentData
+  attachment?: AttachmentData
   reactionCount: string
   commentCount: string
 }
@@ -109,6 +126,9 @@ const festivalPhotos = [
 
 const blockPartyStreet = '/block-party-street.jpg'
 
+const leatherCouchCover =
+  'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=800&h=600&fit=crop'
+
 export const mockPosts: Post[] = [
   {
     id: 'post-event-1',
@@ -117,21 +137,15 @@ export const mockPosts: Post[] = [
       '/day-trip.jpg',
     timestamp: '2h',
     caption:
-      'The countdown is on! Day Trip Festival 2026 is coming to Brooklyn this summer. Check out highlights from last year, or tap interested to get updates about the show as we get closer!',
+      'The countdown is on! Day Trip Festival 2026 is coming to Brooklyn this summer. Check out highlights from last year, or tap the event link to get updates about the show as we get closer!',
     reactionCount: '1K',
     commentCount: '48',
     media: {
       type: 'grid',
       urls: festivalPhotos,
     },
-    attachment: {
-      type: 'event',
-      id: 'event-day-trip-2024',
-      thumbnailUrl:
-        '/day-trip.jpg',
-      title: 'Day Trip Festival 2026',
-      interestedCount: 13,
-      goingCount: 5,
+    captionLink: {
+      displayUrl: 'https://facebook.com/events/s/day-trip-festival/',
       detailPath: '/event/event-day-trip-2024',
     },
   },
@@ -142,71 +156,22 @@ export const mockPosts: Post[] = [
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
     timestamp: '9h',
     caption:
-      'Well, time to say goodbye to my apartment. Everything must go by this weekend.',
+      'Well, time to say goodbye to my apartment. Everything must go by this weekend. More items available on my commerce profile.',
     reactionCount: '14',
     commentCount: '2K',
     media: {
       type: 'single',
-      urls: [
-        'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=600&fit=crop',
-      ],
+      urls: [leatherCouchCover],
+      objectPosition: '50% 72%',
+      imageScale: 2.45,
     },
     attachment: {
-      type: 'marketplace',
-      id: 'collection-pablo-apartment',
-      profileId: 'pablo-poralis',
-      profilePath: '/commerce/pablo-poralis',
-      newItemsCount: 6,
-      items: [
-        {
-          id: 'listing-dresser-1',
-          title: 'Upcycled Wooden Dresser',
-          price: '$185',
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=200&h=200&fit=crop',
-          detailPath: '/marketplace/listing-dresser-1',
-        },
-        {
-          id: 'listing-lamp-1',
-          title: 'Vintage Floor Lamp',
-          price: '$45',
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=200&h=200&fit=crop',
-          detailPath: '/marketplace/listing-lamp-1',
-        },
-        {
-          id: 'listing-chair-1',
-          title: 'Mid-century Accent Chair',
-          price: '$75',
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=200&h=200&fit=crop',
-          detailPath: '/marketplace/listing-chair-1',
-        },
-        {
-          id: 'listing-basket-1',
-          title: 'Wicker Storage Basket',
-          price: '$20',
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop',
-          detailPath: '/marketplace/listing-basket-1',
-        },
-        {
-          id: 'listing-desk-1',
-          title: 'Compact Writing Desk',
-          price: '$120',
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=200&h=200&fit=crop',
-          detailPath: '/marketplace/listing-desk-1',
-        },
-        {
-          id: 'listing-mirror-1',
-          title: 'Hanging Wall Mirror',
-          price: '$35',
-          thumbnailUrl:
-            'https://images.unsplash.com/photo-1618220179428-22790b461013?w=200&h=200&fit=crop',
-          detailPath: '/marketplace/listing-mirror-1',
-        },
-      ],
+      type: 'link',
+      price: '$450',
+      title: 'Vintage Leather Couch',
+      location: 'Los Angeles, CA',
+      detailPath: '/marketplace/listing-dresser-1',
+      ctaLabel: 'Send message',
     },
   },
   {
@@ -222,14 +187,6 @@ export const mockPosts: Post[] = [
     media: {
       type: 'single',
       urls: [blockPartyStreet],
-    },
-    attachment: {
-      type: 'eventReminder',
-      id: 'event-block-party-25th',
-      thumbnailUrl: blockPartyStreet,
-      title: '25th Ave Block Party',
-      metadata: 'Sunday at 1pm',
-      sheetDateLine: 'Sunday from 1–5pm',
     },
   },
 ]
@@ -260,21 +217,16 @@ export const mockEvents: Record<string, EventDetail> = {
 export const mockListings: Record<string, MarketplaceDetail> = {
   'listing-dresser-1': {
     id: 'listing-dresser-1',
-    title: 'Upcycled Wooden Dresser',
-    coverUrl:
-      'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=800&h=600&fit=crop',
-    images: [
-      'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?w=800&h=600&fit=crop',
-    ],
-    price: '$185',
+    title: 'Vintage Leather Couch',
+    coverUrl: leatherCouchCover,
+    images: [leatherCouchCover],
+    price: '$450',
     location: 'Los Angeles, CA',
     distance: 'Nearby · 3 mi',
     description:
-      'Solid wood dresser, refinished by hand. Six spacious drawers, all sliding smoothly. Minor wear consistent with age. Pickup only — must go by this weekend.',
-    conditionSummary: '• Condition: Used – like new...',
-    condition: 'Used – like new',
+      'Cognac leather sofa in great shape. Some light wear on the cushions but no tears. Must pick up by this weekend.',
+    conditionSummary: '• Condition: Good...',
+    condition: 'Good',
     sellerName: 'Pablo Poralis',
     sellerAvatarUrl:
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
