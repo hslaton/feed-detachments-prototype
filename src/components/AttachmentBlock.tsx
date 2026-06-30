@@ -4,8 +4,9 @@ interface AttachmentBlockProps {
   thumbnailUrl: string
   title: string
   metadata: string
-  detailPath: string
-  onNavigate: (path: string) => void
+  detailPath?: string
+  onNavigate?: (path: string) => void
+  onBlockClick?: () => void
   cta: ReactNode
 }
 
@@ -15,17 +16,28 @@ export default function AttachmentBlock({
   metadata,
   detailPath,
   onNavigate,
+  onBlockClick,
   cta,
 }: AttachmentBlockProps) {
+  const handleBlockClick = () => {
+    if (onBlockClick) {
+      onBlockClick()
+      return
+    }
+    if (detailPath && onNavigate) {
+      onNavigate(detailPath)
+    }
+  }
+
   return (
     <div
       role="button"
       tabIndex={0}
-      onClick={() => onNavigate(detailPath)}
+      onClick={handleBlockClick}
       onKeyDown={(event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
-          onNavigate(detailPath)
+          handleBlockClick()
         }
       }}
       className="mx-3 my-2.5 flex cursor-pointer items-center gap-3 rounded-xl border border-[#ced0d4] bg-[#f7f8fa] px-3 py-2.5 transition-colors hover:bg-[#eef0f3] active:bg-[#e4e6eb]"

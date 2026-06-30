@@ -1,26 +1,25 @@
-import { useState } from 'react'
 import type { MarketplaceAttachmentData } from '../data/mockPosts'
-import AttachmentBlock from './AttachmentBlock'
-import { useToast } from './ToastProvider'
 
 interface MarketplaceAttachmentProps {
   attachment: MarketplaceAttachmentData
   onNavigate: (path: string) => void
 }
 
-function BookmarkIcon({ filled }: { filled: boolean }) {
+function ShopIcon() {
   return (
     <svg
       viewBox="0 0 24 24"
-      fill={filled ? 'currentColor' : 'none'}
+      fill="none"
       stroke="currentColor"
-      strokeWidth={filled ? 0 : 1.8}
+      strokeWidth={1.9}
       strokeLinecap="round"
       strokeLinejoin="round"
       className="h-[15px] w-[15px]"
       aria-hidden="true"
     >
-      <path d="M6.32 2.58a49.26 49.26 0 0111.36 0c1.5.17 2.57 1.46 2.57 2.93V21a.75.75 0 01-1.09.67L12 18.09l-7.16 3.58A.75.75 0 013.75 21V5.51c0-1.47 1.07-2.76 2.57-2.93z" />
+      <path d="M3 9 4.9 4.6h14.2L21 9q-3 1.9-6 0-3 1.9-6 0-3 1.9-6 0Z" />
+      <path d="M5 10.2V20h14v-9.8" />
+      <path d="M9.7 20v-4.4a2.3 2.3 0 0 1 4.6 0V20" />
     </svg>
   )
 }
@@ -29,44 +28,44 @@ export default function MarketplaceAttachment({
   attachment,
   onNavigate,
 }: MarketplaceAttachmentProps) {
-  const [saved, setSaved] = useState(false)
-  const { showToast } = useToast()
-
   return (
-    <AttachmentBlock
-      thumbnailUrl={attachment.thumbnailUrl}
-      title={attachment.title}
-      metadata={`${attachment.price} · ${attachment.location}`}
-      detailPath={attachment.detailPath}
-      onNavigate={onNavigate}
-      cta={
+    <div className="my-2.5 overflow-x-auto px-3 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex h-[68px] w-max items-center gap-2">
         <button
           type="button"
-          onClick={(event) => {
-            event.stopPropagation()
-            setSaved((value) => {
-              const next = !value
-              if (next) {
-                showToast({
-                  message: 'Saved.',
-                  actionLabel: 'View',
-                  onAction: () => onNavigate(attachment.detailPath),
-                  icon: <BookmarkIcon filled />,
-                })
-              }
-              return next
-            })
-          }}
-          className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[13px] font-semibold transition-colors ${
-            saved
-              ? 'bg-[#e7f3ff] text-[#1877f2]'
-              : 'bg-[#e4e6eb] text-[#050505] hover:bg-[#d8dadf]'
-          }`}
+          onClick={() => onNavigate(attachment.profilePath)}
+          className="flex h-full shrink-0 items-center gap-2.5 rounded-xl border border-[#ced0d4] bg-[#f7f8fa] px-3 transition-colors hover:bg-[#eef0f3] active:bg-[#e4e6eb]"
         >
-          <BookmarkIcon filled={saved} />
-          {saved ? 'Saved' : 'Save'}
+          <div className="text-left">
+            <p className="whitespace-nowrap text-[15px] font-semibold leading-tight text-[#050505]">
+              {attachment.newItemsCount} new items
+            </p>
+            <p className="whitespace-nowrap text-[13px] text-[#65676b]">
+              Marketplace
+            </p>
+          </div>
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-[#e4e6eb] px-2.5 py-1.5 text-[13px] font-semibold text-[#050505]">
+            <ShopIcon />
+            Shop
+          </span>
         </button>
-      }
-    />
+
+        {attachment.items.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            onClick={() => onNavigate(item.detailPath)}
+            aria-label={`${item.title}, ${item.price}`}
+            className="h-full w-[68px] shrink-0 overflow-hidden rounded-xl border border-[#ced0d4] bg-[#f0f2f5] transition-opacity hover:opacity-95 active:opacity-90"
+          >
+            <img
+              src={item.thumbnailUrl}
+              alt=""
+              className="h-full w-full object-cover"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
   )
 }

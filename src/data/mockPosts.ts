@@ -16,17 +16,42 @@ export interface EventAttachmentData {
   detailPath: string
 }
 
-export interface MarketplaceAttachmentData {
-  type: 'marketplace'
+export interface MarketplaceListingPreview {
   id: string
-  thumbnailUrl: string
   title: string
   price: string
-  location: string
+  thumbnailUrl: string
   detailPath: string
 }
 
-export type AttachmentData = EventAttachmentData | MarketplaceAttachmentData
+export interface MarketplaceAttachmentData {
+  type: 'marketplace'
+  id: string
+  profileId: string
+  profilePath: string
+  newItemsCount: number
+  items: MarketplaceListingPreview[]
+}
+
+export interface CommerceProfile {
+  id: string
+  sellerFirstName: string
+  listingIds: string[]
+}
+
+export interface EventReminderAttachmentData {
+  type: 'eventReminder'
+  id: string
+  thumbnailUrl: string
+  title: string
+  metadata: string
+  sheetDateLine: string
+}
+
+export type AttachmentData =
+  | EventAttachmentData
+  | MarketplaceAttachmentData
+  | EventReminderAttachmentData
 
 export interface Post {
   id: string
@@ -82,6 +107,8 @@ const festivalPhotos = [
   'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=800&h=600&fit=crop',
 ]
 
+const blockPartyStreet = '/block-party-street.jpg'
+
 export const mockPosts: Post[] = [
   {
     id: 'post-event-1',
@@ -126,39 +153,83 @@ export const mockPosts: Post[] = [
     },
     attachment: {
       type: 'marketplace',
-      id: 'listing-dresser-1',
-      thumbnailUrl:
-        'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=96&h=96&fit=crop',
-      title: 'Upcycled Wooden Dresser',
-      price: '$185',
-      location: 'Los Angeles, CA',
-      detailPath: '/marketplace/listing-dresser-1',
+      id: 'collection-pablo-apartment',
+      profileId: 'pablo-poralis',
+      profilePath: '/commerce/pablo-poralis',
+      newItemsCount: 6,
+      items: [
+        {
+          id: 'listing-dresser-1',
+          title: 'Upcycled Wooden Dresser',
+          price: '$185',
+          thumbnailUrl:
+            'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=200&h=200&fit=crop',
+          detailPath: '/marketplace/listing-dresser-1',
+        },
+        {
+          id: 'listing-lamp-1',
+          title: 'Vintage Floor Lamp',
+          price: '$45',
+          thumbnailUrl:
+            'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=200&h=200&fit=crop',
+          detailPath: '/marketplace/listing-lamp-1',
+        },
+        {
+          id: 'listing-chair-1',
+          title: 'Mid-century Accent Chair',
+          price: '$75',
+          thumbnailUrl:
+            'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=200&h=200&fit=crop',
+          detailPath: '/marketplace/listing-chair-1',
+        },
+        {
+          id: 'listing-basket-1',
+          title: 'Wicker Storage Basket',
+          price: '$20',
+          thumbnailUrl:
+            'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop',
+          detailPath: '/marketplace/listing-basket-1',
+        },
+        {
+          id: 'listing-desk-1',
+          title: 'Compact Writing Desk',
+          price: '$120',
+          thumbnailUrl:
+            'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=200&h=200&fit=crop',
+          detailPath: '/marketplace/listing-desk-1',
+        },
+        {
+          id: 'listing-mirror-1',
+          title: 'Hanging Wall Mirror',
+          price: '$35',
+          thumbnailUrl:
+            'https://images.unsplash.com/photo-1618220179428-22790b461013?w=200&h=200&fit=crop',
+          detailPath: '/marketplace/listing-mirror-1',
+        },
+      ],
     },
   },
   {
-    id: 'post-video-1',
-    actorName: 'Day Trip',
+    id: 'post-block-party-1',
+    actorName: 'Jessica Klingen',
     actorAvatarUrl:
-      '/day-trip.jpg',
-    timestamp: '1d',
+      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop',
+    timestamp: '3h',
     caption:
-      'Sneak peek from the stage — full recap coming soon. Tap to watch, or RSVP to the festival below.',
-    reactionCount: '876',
-    commentCount: '12',
+      'Hey hey, we are having a block party on 25th Ave. this Sunday from 1pm to 5pm! Come one, come all!',
+    reactionCount: '14',
+    commentCount: '2K',
     media: {
-      type: 'video',
-      urls: ['https://assets.mixkit.co/videos/14084/14084-720.mp4'],
-      posterUrl: 'https://assets.mixkit.co/videos/14084/14084-thumb-720-0.jpg',
+      type: 'single',
+      urls: [blockPartyStreet],
     },
     attachment: {
-      type: 'event',
-      id: 'event-day-trip-2024',
-      thumbnailUrl:
-        '/day-trip.jpg',
-      title: 'Day Trip Festival 2026',
-      interestedCount: 13,
-      goingCount: 5,
-      detailPath: '/event/event-day-trip-2024',
+      type: 'eventReminder',
+      id: 'event-block-party-25th',
+      thumbnailUrl: blockPartyStreet,
+      title: '25th Ave Block Party',
+      metadata: 'Sunday at 1pm',
+      sheetDateLine: 'Sunday from 1–5pm',
     },
   },
 ]
@@ -212,5 +283,140 @@ export const mockListings: Record<string, MarketplaceDetail> = {
     buyerFirstName: 'Pablo',
     mapUrl:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+  },
+  'listing-lamp-1': {
+    id: 'listing-lamp-1',
+    title: 'Vintage Floor Lamp',
+    coverUrl:
+      'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&h=600&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&h=600&fit=crop',
+    ],
+    price: '$45',
+    location: 'Los Angeles, CA',
+    distance: 'Nearby · 3 mi',
+    description:
+      'Brass floor lamp with adjustable arm. Works perfectly, includes bulb. Pickup this weekend only.',
+    conditionSummary: '• Condition: Good...',
+    condition: 'Good',
+    sellerName: 'Pablo Poralis',
+    sellerAvatarUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
+    sellerRating: '4.9',
+    sellerReviews: 12,
+    buyerFirstName: 'Pablo',
+    mapUrl:
+      'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+  },
+  'listing-chair-1': {
+    id: 'listing-chair-1',
+    title: 'Mid-century Accent Chair',
+    coverUrl:
+      'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&h=600&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?w=800&h=600&fit=crop',
+    ],
+    price: '$75',
+    location: 'Los Angeles, CA',
+    distance: 'Nearby · 3 mi',
+    description:
+      'Teak frame with original upholstery. Some fading on the fabric but structurally solid.',
+    conditionSummary: '• Condition: Fair...',
+    condition: 'Fair',
+    sellerName: 'Pablo Poralis',
+    sellerAvatarUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
+    sellerRating: '4.9',
+    sellerReviews: 12,
+    buyerFirstName: 'Pablo',
+    mapUrl:
+      'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+  },
+  'listing-basket-1': {
+    id: 'listing-basket-1',
+    title: 'Wicker Storage Basket',
+    coverUrl:
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop',
+    ],
+    price: '$20',
+    location: 'Los Angeles, CA',
+    distance: 'Nearby · 3 mi',
+    description:
+      'Large woven basket, great for blankets or toys. Clean and sturdy.',
+    conditionSummary: '• Condition: Good...',
+    condition: 'Good',
+    sellerName: 'Pablo Poralis',
+    sellerAvatarUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
+    sellerRating: '4.9',
+    sellerReviews: 12,
+    buyerFirstName: 'Pablo',
+    mapUrl:
+      'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+  },
+  'listing-desk-1': {
+    id: 'listing-desk-1',
+    title: 'Compact Writing Desk',
+    coverUrl:
+      'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&h=600&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&h=600&fit=crop',
+    ],
+    price: '$120',
+    location: 'Los Angeles, CA',
+    distance: 'Nearby · 3 mi',
+    description:
+      'Small desk with drawer. Perfect for a home office nook. Must pick up by Sunday.',
+    conditionSummary: '• Condition: Used – like new...',
+    condition: 'Used – like new',
+    sellerName: 'Pablo Poralis',
+    sellerAvatarUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
+    sellerRating: '4.9',
+    sellerReviews: 12,
+    buyerFirstName: 'Pablo',
+    mapUrl:
+      'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+  },
+  'listing-mirror-1': {
+    id: 'listing-mirror-1',
+    title: 'Hanging Wall Mirror',
+    coverUrl:
+      'https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&h=600&fit=crop',
+    images: [
+      'https://images.unsplash.com/photo-1618220179428-22790b461013?w=800&h=600&fit=crop',
+    ],
+    price: '$35',
+    location: 'Los Angeles, CA',
+    distance: 'Nearby · 3 mi',
+    description:
+      'Round mirror with thin black frame. Includes hanging hardware.',
+    conditionSummary: '• Condition: Good...',
+    condition: 'Good',
+    sellerName: 'Pablo Poralis',
+    sellerAvatarUrl:
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop',
+    sellerRating: '4.9',
+    sellerReviews: 12,
+    buyerFirstName: 'Pablo',
+    mapUrl:
+      'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+  },
+}
+
+export const mockCommerceProfiles: Record<string, CommerceProfile> = {
+  'pablo-poralis': {
+    id: 'pablo-poralis',
+    sellerFirstName: 'Pablo',
+    listingIds: [
+      'listing-dresser-1',
+      'listing-lamp-1',
+      'listing-chair-1',
+      'listing-basket-1',
+      'listing-desk-1',
+      'listing-mirror-1',
+    ],
   },
 }

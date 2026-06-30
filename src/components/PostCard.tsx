@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router-dom'
 import type { Post } from '../data/mockPosts'
 import EventAttachment from './EventAttachment'
+import EventReminderAttachment from './EventReminderAttachment'
 import MarketplaceAttachment from './MarketplaceAttachment'
 import MediaBlock from './MediaBlock'
 import MediaViewer from './MediaViewer'
@@ -44,11 +45,13 @@ export default function PostCard({ post }: PostCardProps) {
           attachment={post.attachment}
           onNavigate={navigate}
         />
-      ) : (
+      ) : post.attachment.type === 'marketplace' ? (
         <MarketplaceAttachment
           attachment={post.attachment}
           onNavigate={navigate}
         />
+      ) : (
+        <EventReminderAttachment attachment={post.attachment} />
       )}
 
       <PostFooter
