@@ -76,6 +76,7 @@ function NotFound() {
 
 export default function MarketplaceDetailPage() {
   const { listingId } = useParams<{ listingId: string }>()
+  const navigate = useNavigate()
   const listing = listingId ? mockListings[listingId] : undefined
   const [activeImage, setActiveImage] = useState(0)
   const [delivery, setDelivery] = useState<'pickup' | 'shipping'>('pickup')
@@ -252,31 +253,67 @@ export default function MarketplaceDetailPage() {
       </div>
 
       <div className="mt-5 px-4">
-        <h2 className="flex items-center gap-1 text-[19px] font-bold text-[#050505]">
-          Seller
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
-            <path d="M9 6l6 6-6 6" />
-          </svg>
-        </h2>
-        <div className="mt-2 flex items-center gap-3">
-          <img
-            src={listing.sellerAvatarUrl}
-            alt=""
-            className="h-11 w-11 rounded-full object-cover"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="text-[15px] font-semibold text-[#050505]">
-              {listing.sellerName}
-            </p>
-            <p className="flex items-center gap-1 text-[13px] text-[#65676b]">
-              <span className="text-[#f7b928]">★★★★★</span>
-              <span className="font-semibold text-[#050505]">{listing.sellerRating}</span>
-              <span>({listing.sellerReviews})</span>
-            </p>
-          </div>
+        <div className="relative">
+          {listing.sellerProfilePath ? (
+            <button
+              type="button"
+              onClick={() => navigate(listing.sellerProfilePath!)}
+              className="w-full pr-24 text-left"
+            >
+              <h2 className="flex items-center gap-1 text-[19px] font-bold text-[#050505]">
+                Seller
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" />
+                </svg>
+              </h2>
+              <div className="mt-2 flex items-center gap-3">
+                <img
+                  src={listing.sellerAvatarUrl}
+                  alt=""
+                  className="h-11 w-11 rounded-full object-cover"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[15px] font-semibold text-[#050505]">
+                    {listing.sellerName}
+                  </p>
+                  <p className="flex items-center gap-1 text-[13px] text-[#65676b]">
+                    <span className="text-[#f7b928]">★★★★★</span>
+                    <span className="font-semibold text-[#050505]">{listing.sellerRating}</span>
+                    <span>({listing.sellerReviews})</span>
+                  </p>
+                </div>
+              </div>
+            </button>
+          ) : (
+            <>
+              <h2 className="flex items-center gap-1 text-[19px] font-bold text-[#050505]">
+                Seller
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4" aria-hidden="true">
+                  <path d="M9 6l6 6-6 6" />
+                </svg>
+              </h2>
+              <div className="mt-2 flex items-center gap-3 pr-24">
+                <img
+                  src={listing.sellerAvatarUrl}
+                  alt=""
+                  className="h-11 w-11 rounded-full object-cover"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[15px] font-semibold text-[#050505]">
+                    {listing.sellerName}
+                  </p>
+                  <p className="flex items-center gap-1 text-[13px] text-[#65676b]">
+                    <span className="text-[#f7b928]">★★★★★</span>
+                    <span className="font-semibold text-[#050505]">{listing.sellerRating}</span>
+                    <span>({listing.sellerReviews})</span>
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
           <button
             type="button"
-            className="shrink-0 rounded-lg bg-[#e4e6eb] px-5 py-2 text-[15px] font-semibold text-[#050505]"
+            className="absolute right-0 top-8 shrink-0 rounded-lg bg-[#e4e6eb] px-5 py-2 text-[15px] font-semibold text-[#050505]"
           >
             Follow
           </button>

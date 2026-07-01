@@ -115,6 +115,7 @@ export interface MarketplaceDetail {
   sellerReviews: number
   buyerFirstName: string
   mapUrl: string
+  sellerProfilePath?: string
 }
 
 const festivalPhotos = [
@@ -170,7 +171,7 @@ export const mockPosts: Post[] = [
       price: '$450',
       title: 'Vintage Leather Couch',
       location: 'Los Angeles, CA',
-      detailPath: '/commerce/pablo-poralis',
+      detailPath: '/marketplace/listing-dresser-1',
       ctaLabel: 'Send message',
     },
   },
@@ -235,6 +236,7 @@ export const mockListings: Record<string, MarketplaceDetail> = {
     buyerFirstName: 'Pablo',
     mapUrl:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+    sellerProfilePath: '/commerce/pablo-poralis',
   },
   'listing-lamp-1': {
     id: 'listing-lamp-1',
@@ -259,6 +261,7 @@ export const mockListings: Record<string, MarketplaceDetail> = {
     buyerFirstName: 'Pablo',
     mapUrl:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+    sellerProfilePath: '/commerce/pablo-poralis',
   },
   'listing-chair-1': {
     id: 'listing-chair-1',
@@ -283,6 +286,7 @@ export const mockListings: Record<string, MarketplaceDetail> = {
     buyerFirstName: 'Pablo',
     mapUrl:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+    sellerProfilePath: '/commerce/pablo-poralis',
   },
   'listing-basket-1': {
     id: 'listing-basket-1',
@@ -307,6 +311,7 @@ export const mockListings: Record<string, MarketplaceDetail> = {
     buyerFirstName: 'Pablo',
     mapUrl:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+    sellerProfilePath: '/commerce/pablo-poralis',
   },
   'listing-desk-1': {
     id: 'listing-desk-1',
@@ -331,6 +336,7 @@ export const mockListings: Record<string, MarketplaceDetail> = {
     buyerFirstName: 'Pablo',
     mapUrl:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+    sellerProfilePath: '/commerce/pablo-poralis',
   },
   'listing-mirror-1': {
     id: 'listing-mirror-1',
@@ -355,6 +361,7 @@ export const mockListings: Record<string, MarketplaceDetail> = {
     buyerFirstName: 'Pablo',
     mapUrl:
       'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800&h=400&fit=crop',
+    sellerProfilePath: '/commerce/pablo-poralis',
   },
 }
 
