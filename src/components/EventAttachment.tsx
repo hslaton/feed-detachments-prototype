@@ -50,7 +50,7 @@ export default function EventAttachment({
               const next = !value
               if (next) {
                 showToast({
-                  message: 'Your response is visible to the hosts and Friends',
+                  message: 'Your response is visible to the hosts and Friends.',
                   actionLabel: 'Change',
                 })
               }

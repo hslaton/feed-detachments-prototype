@@ -91,7 +91,7 @@ export default function EventDetailPage() {
               if (next) {
                 setGoing(false)
                 showToast({
-                  message: 'Your response is visible to the hosts and Friends',
+                  message: 'Your response is visible to the hosts and Friends.',
                   actionLabel: 'Change',
                 })
               }
