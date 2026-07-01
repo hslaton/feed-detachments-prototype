@@ -170,7 +170,7 @@ export const mockPosts: Post[] = [
       price: '$450',
       title: 'Vintage Leather Couch',
       location: 'Los Angeles, CA',
-      detailPath: '/marketplace/listing-dresser-1',
+      detailPath: '/commerce/pablo-poralis',
       ctaLabel: 'Send message',
     },
   },
